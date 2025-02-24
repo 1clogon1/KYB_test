@@ -27,6 +27,7 @@
 
 7. Выполняем миграции таблиц в бд:
   php yii migrate
+
 Если нужно получить доступ к базе данных, устанавливаем клиент PostgreSQL:
   apt-get update && apt-get install -y postgresql-client
 
