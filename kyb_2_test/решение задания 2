@@ -1,0 +1,22 @@
+JOIN:
+SELECT b.title AS book_title, COUNT(a.id) AS author_count, GROUP_CONCAT(a.full_name ORDER BY a.full_name ASC) AS author_names
+FROM book b
+JOIN book_to_author bta ON b.id = bta.book_id
+JOIN author a ON bta.author_id = a.id
+GROUP BY b.id
+ORDER BY author_count ASC
+
+Вложенный:
+SELECT b.title AS book_title,
+(SELECT COUNT(*) FROM book_to_author bta WHERE bta.book_id = b.id) AS author_count,
+(SELECT GROUP_CONCAT(a.full_name ORDER BY a.full_name ASC)
+FROM author a
+JOIN book_to_author bta ON a.id = bta.author_id
+WHERE bta.book_id = b.id) AS author_names
+FROM book b
+ORDER BY author_count ASC
+
+Особенность JOIN в том, что на этапе выполнения запроса, база как бы объединяет таблицы,
+что и оптимизирует выполнение, так как все происходит одним запросом, а вот во вложенных запросах,
+по сути это несколько отдельных запросов, что затянет работу над выводом данных.
+Так же JOIN более читаемый чем вложенный запрос.
